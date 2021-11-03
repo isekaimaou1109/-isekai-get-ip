@@ -1,0 +1,15 @@
+{
+  "name": "get-ip",
+  "version": "1.0.0",
+  "description": "This package is an alternative solution to get ip in your computer",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm test.js"
+  },
+  "keywords": ["internal-ip", "private-ip", "public-ip", "ip", "ips", "ip-authentication", "default-gateway-ip"],
+  "author": "yoki-sama",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.24.0"
+  }
+}
