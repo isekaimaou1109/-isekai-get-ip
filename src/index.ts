@@ -1,13 +1,14 @@
+import { NetworkInterfaceInfo } from 'os';
+import { IPInfo, Version } from '../types'
+
 module.exports = (function() {
-  const os = require('os')
-  const nics = os.networkInterfaces();
+  const os: typeof import('os') = require('os')
+  const nics: NodeJS.Dict<NetworkInterfaceInfo[]> = os.networkInterfaces();
 
   return ({
     getPrivateIp: function(version) {
-      var nic;
-      if(version !== '4' && version !== '6') {
-        return new Error('Gomenasai please nhập 4 hoặc 6 vì ip chỉ có v4 hoặc v6');
-      }
+      var nic: IPInfo | IPInfo[];
+
       for(let nicName in nics) {
         for(let item of nics[nicName]) {
           if(item.family === 'IPv6' && /^\b2001\b/gm.test(item.address)) {
@@ -22,11 +23,11 @@ module.exports = (function() {
     }, 
 
     isIPv4: function(ipv4) {
-      return typeof ipv4 === 'string' && ipv4.trim().split('.').every(numeric => parseInt(numeric) > 0 && parseInt(numeric) < 255) ? true : false  
+      return ipv4.trim().split('.').every(numeric => parseInt(numeric) > 0 && parseInt(numeric) < 255) ? true : false  
     },
 
     isMacaddress: function(macaddress) {
-      return typeof macaddress === 'string' && macaddress.trim().split(':').length == 6 && macaddress.split(':').every(item => item.length == 2 && /[a-f0-9]{2}/gm.test(item)) ? true : false;
+      return macaddress.trim().split(':').length == 6 && macaddress.split(':').every(item => item.length == 2 && /[a-f0-9]{2}/gm.test(item)) ? true : false;
     },
 
     isIPv6: function(ipv6) {
@@ -36,10 +37,10 @@ module.exports = (function() {
     getDefaultGateway: async function(ip) {
       const { execSync } = require('child_process');
     
-      const content = await execSync(os.platform() == 'win32' ? 'route print -4' : 'ip route list').toString();
-      const lines = content.split('\n');
-      const index = lines.map(line => line.trim()).indexOf('Active Routes:');
-      const routes = lines.slice(index + 1, lines.length);
+      const content: string = await execSync(os.platform() == 'win32' ? 'route print -4' : 'ip route list').toString();
+      const lines: string[] = content.split('\n');
+      const index: number = lines.map(line => line.trim()).indexOf('Active Routes:');
+      const routes: string[] = lines.slice(index + 1, lines.length);
     
       for(let i = 0; i < routes.length; i++) {
         if(routes[i].includes(ip)) {
@@ -51,16 +52,15 @@ module.exports = (function() {
       }
     },
 
-    getPublicIp: async function(version = '4') {
-      const axios = require('axios').default;
-      if(version !== '4' && version !== '6' && version !== 'both') {
-        return null;
-      }
+    getPublicIp: async function(version: Version | 'both') {
+      const axios: typeof import('axios').default = require('axios').default;
+      
       if(version === 'both') {
         const ipv4 = await axios.get(`https://ipv4bot.whatismyipaddress.com`);
         const ipv6 = await axios.get(`https://ipv6bot.whatismyipaddress.com`);
-        return { ipv4: ipv4.data, ipv6: ipv6.data };
+        return ({ ipv4: ipv4.data, ipv6: ipv6.data });
       }
+
       const ip = await axios.get(`https://ipv${version}bot.whatismyipaddress.com`);
       return ip.data;
     }

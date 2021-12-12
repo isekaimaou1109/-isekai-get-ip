@@ -1,4 +1,4 @@
-const wrapper = require('./index')();
+const wrapper = require('./src/index')();
 
 /* lấy địa chỉ nội bộ của bạn */
 console.log("This get an IPv4 on your computer => " + JSON.stringify(wrapper.getPrivateIp('4'), null, 2));

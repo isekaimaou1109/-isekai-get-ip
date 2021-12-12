@@ -1,10 +1,10 @@
 {
-  "name": "@isekai/get-ip",
-  "version": "1.0.0",
+  "name": "@isekaimaouyoki-sama/get-ip",
+  "version": "1.0.1",
   "description": "This package is an alternative solution to get ip in your computer",
   "main": "index.js",
   "scripts": {
-    "start": "npm test.js"
+    "start": "tsc ./src/index.ts --outDir ./build"
   },
   "keywords": [
     "internal-ip",
@@ -15,9 +15,10 @@
     "ip-authentication",
     "default-gateway-ip"
   ],
-  "author": "yoki-sama",
+  "author": "isekaimaou1109",
   "license": "MIT",
   "dependencies": {
+    "@types/node": "^16.11.12",
     "axios": "^0.24.0"
   },
   "devDependencies": {},
